@@ -1,21 +1,14 @@
+from __future__ import print_function
+from __future__ import division
 import config
 import sys
 
-visualization_effect = visualize_spectrum
-"""Visualization effect to display on the LED strip"""
 
 if len(sys.argv) > 1:
     param = sys.argv[1]
     if '=' in param:
         param, value = param.rstrip('-').split('=')
     param = param.upper()
-    if param == 'CV':
-        if value == 'spectrum':
-            visualization_effect = visualize_spectrum
-        if value == 'scroll':
-            visualization_effect = visualize_scroll
-        if value == 'energy':
-            visualization_effect = visualize_energy
     if param == 'CB':
         config.BRIGHTNESS = int(value)
     if param == 'CP':
@@ -23,8 +16,7 @@ if len(sys.argv) > 1:
     if param == 'CF':
         config.FPS = int(value)
 
-from __future__ import print_function
-from __future__ import division
+
 import time
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter1d
@@ -180,7 +172,6 @@ def visualize_energy(y):
 
 _prev_spectrum = np.tile(0.01, config.N_PIXELS // 2)
 
-
 def visualize_spectrum(y):
     """Effect that maps the Mel filterbank frequencies onto the LED strip"""
     global _prev_spectrum
@@ -266,6 +257,9 @@ def microphone_update(audio_samples):
             print('FPS {:.0f} / {:.0f}'.format(fps, config.FPS))
 
 
+visualization_effect = visualize_spectrum
+
+
 # Number of audio samples to read every time frame
 samples_per_frame = int(config.MIC_RATE / config.FPS)
 
@@ -274,6 +268,18 @@ y_roll = np.random.rand(config.N_ROLLING_HISTORY, samples_per_frame) / 1e16
 
 
 if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        param = sys.argv[1]
+        if '=' in param:
+            param, value = param.rstrip('-').split('=')
+        param = param.upper()
+        if param == 'CV':
+            if value == 'spectrum':
+                visualization_effect = visualize_spectrum
+            if value == 'scroll':
+                visualization_effect = visualize_scroll
+            if value == 'energy':
+                visualization_effect = visualize_energy
     led.update()
     # Start listening to live audio stream
     microphone.start_stream(microphone_update)
