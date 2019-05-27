@@ -1,13 +1,36 @@
+import config
+import sys
+
+visualization_effect = visualize_spectrum
+"""Visualization effect to display on the LED strip"""
+
+if len(sys.argv) > 1:
+    param = sys.argv[1]
+    if '=' in param:
+        param, value = param.rstrip('-').split('=')
+    param = param.upper()
+    if param == 'CV':
+        if value == 'spectrum':
+            visualization_effect = visualize_spectrum
+        if value == 'scroll':
+            visualization_effect = visualize_scroll
+        if value == 'energy':
+            visualization_effect = visualize_energy
+    if param == 'CB':
+        config.BRIGHTNESS = int(value)
+    if param == 'CP':
+        config.N_PIXELS = int(value)
+    if param == 'CF':
+        config.FPS = int(value)
+
 from __future__ import print_function
 from __future__ import division
 import time
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter1d
-import config
 import microphone
 import dsp
 import led
-import sys
 
 _time_prev = time.time() * 1000.0
 """The previous time that the frames_per_second() function was called"""
@@ -249,29 +272,8 @@ samples_per_frame = int(config.MIC_RATE / config.FPS)
 # Array containing the rolling audio sample window
 y_roll = np.random.rand(config.N_ROLLING_HISTORY, samples_per_frame) / 1e16
 
-visualization_effect = visualize_spectrum
-"""Visualization effect to display on the LED strip"""
-
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        param = sys.argv[1]
-        if '=' in param:
-            param, value = param.rstrip('-').split('=')
-        param = param.upper()
-        if param == 'CV':
-            if value == 'spectrum':
-                visualization_effect = visualize_spectrum
-            if value == 'scroll':
-                visualization_effect = visualize_scroll
-            if value == 'energy':
-                visualization_effect = visualize_energy
-        if param == 'CB':
-            config.BRIGHTNESS = int(value)
-        if param == 'CP':
-            config.N_PIXELS = int(value)
-        if param == 'CF':
-            config.FPS = int(value)
     led.update()
     # Start listening to live audio stream
     microphone.start_stream(microphone_update)
