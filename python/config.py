@@ -3,7 +3,7 @@ from __future__ import print_function
 from __future__ import division
 import os
 
-DEVICE = 'esp8266'
+DEVICE = 'pi'
 """Device used to control LED strip. Must be 'pi',  'esp8266' or 'blinkstick'
 
 'esp8266' means that you are using an ESP8266 module to control the LED strip
@@ -16,31 +16,18 @@ audio input and control the LED strip directly.
 to control the leds connected to it.
 """
 
-if DEVICE == 'esp8266':
-    UDP_IP = '192.168.0.150'
-    """IP address of the ESP8266. Must match IP in ws2812_controller.ino"""
-    UDP_PORT = 7777
-    """Port number used for socket communication between Python and ESP8266"""
-    SOFTWARE_GAMMA_CORRECTION = False
-    """Set to False because the firmware handles gamma correction + dither"""
-
-if DEVICE == 'pi':
-    LED_PIN = 18
-    """GPIO pin connected to the LED strip pixels (must support PWM)"""
-    LED_FREQ_HZ = 800000
-    """LED signal frequency in Hz (usually 800kHz)"""
-    LED_DMA = 5
-    """DMA channel used for generating PWM signal (try 5)"""
-    BRIGHTNESS = 255
-    """Brightness of LED strip between 0 and 255"""
-    LED_INVERT = True
-    """Set True if using an inverting logic level converter"""
-    SOFTWARE_GAMMA_CORRECTION = True
-    """Set to True because Raspberry Pi doesn't use hardware dithering"""
-
-if DEVICE == 'blinkstick':
-    SOFTWARE_GAMMA_CORRECTION = True
-    """Set to True because blinkstick doesn't use hardware dithering"""
+LED_PIN = 18
+"""GPIO pin connected to the LED strip pixels (must support PWM)"""
+LED_FREQ_HZ = 800000
+"""LED signal frequency in Hz (usually 800kHz)"""
+LED_DMA = 10
+"""DMA channel used for generating PWM signal (try 5)"""
+BRIGHTNESS = 255
+"""Brightness of LED strip between 0 and 255"""
+LED_INVERT = True
+"""Set True if using an inverting logic level converter"""
+SOFTWARE_GAMMA_CORRECTION = True
+"""Set to True because Raspberry Pi doesn't use hardware dithering"""
 
 USE_GUI = True
 """Whether or not to display a PyQtGraph GUI plot of visualization"""
