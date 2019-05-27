@@ -7,7 +7,7 @@ import sys
 if len(sys.argv) > 1:
     param = sys.argv[1]
     if '=' in param:
-        param, value = param.rstrip('-').split('=')
+        param, value = param.lstrip('-').split('=')
     param = param.upper()
     if param == 'CB':
         config.BRIGHTNESS = int(value)
@@ -271,14 +271,19 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         param = sys.argv[1]
         if '=' in param:
-            param, value = param.rstrip('-').split('=')
+            param, value = param.lstrip('-').split('=')
         param = param.upper()
+        print('param ' + param)
         if param == 'CV':
+            print('Param CV')
             if value == 'spectrum':
+                print('Spectrum')
                 visualization_effect = visualize_spectrum
             if value == 'scroll':
+                print('Scroll')
                 visualization_effect = visualize_scroll
             if value == 'energy':
+                print('Energy')
                 visualization_effect = visualize_energy
     led.update()
     # Start listening to live audio stream
